@@ -1,16 +1,19 @@
 
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:productos_app/models/models.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 
 class ProductService extends ChangeNotifier{
 
-  final String _baseUrl= 'fir-demo-c2c99-default-rtdb.firebaseio.com';
+  final String? _baseUrl= dotenv.env['FIRE_BASE'];
   final List<Product> products = [];
   late Product? selectedProduct;
   File? newPictureFile;
@@ -31,7 +34,7 @@ class ProductService extends ChangeNotifier{
     isLoading = true;
     notifyListeners();
 
-    final url = Uri.https(_baseUrl,'products.json',{
+    final url = Uri.https(_baseUrl!,'products.json',{
       'auth': await storage.read(key: 'token') ?? ''
     });
     final resp = await http.get(url);
@@ -67,7 +70,7 @@ class ProductService extends ChangeNotifier{
 
 
   Future<String> updateProduct(Product product)async{
-    final url = Uri.https(_baseUrl,'products/${product.id}.json',{
+    final url = Uri.https(_baseUrl!,'products/${product.id}.json',{
       'auth': await storage.read(key: 'token') ?? ''
     });
     await http.put(url, body: product.toJson());
@@ -80,7 +83,7 @@ class ProductService extends ChangeNotifier{
   }
 
   Future<String> createProduct(Product product)async{
-    final url = Uri.https(_baseUrl,'products.json',{
+    final url = Uri.https(_baseUrl!,'products.json',{
       'auth': await storage.read(key: 'token') ?? ''
     });
     final resp = await http.post(url, body: product.toJson());
@@ -110,7 +113,7 @@ class ProductService extends ChangeNotifier{
     isSaving = true;
     notifyListeners();
 
-    final url = Uri.parse('https://api.cloudinary.com/v1_1/dygddfdcl/image/upload?upload_preset=clv085sp');
+    final url = Uri.parse(dotenv.env['CLOUD_NAME']!);
     
     final imageUploadRequest = http.MultipartRequest( 'POST', url);
 

@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+
 import 'package:productos_app/screens/screens.dart';
 import 'package:productos_app/services/services.dart';
 import 'package:productos_app/theme/app_theme.dart';
-import 'package:provider/provider.dart';
 
-void main() => runApp(const AppState());
+import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+Future main()async{
+  await dotenv.load(fileName: ".env");
+  runApp(const AppState());
+} 
 
 
 class AppState extends StatelessWidget {
